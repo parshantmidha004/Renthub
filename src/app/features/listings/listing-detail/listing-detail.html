@@ -1,0 +1,194 @@
+@if (listing(); as post) {
+  <section class="container detail-page py-4">
+    <div class="row g-4">
+      <!-- Gallery + content -->
+      <div class="col-lg-8">
+        <div class="gallery">
+          <img class="main-photo" [src]="mainPhoto()" [alt]="post.title" />
+          @if (photos().length > 1) {
+            <div class="thumbs d-flex gap-2 mt-2">
+              @for (photo of photos(); track photo) {
+                <button
+                  type="button"
+                  class="thumb-btn"
+                  [class.active]="mainPhoto() === photo"
+                  (click)="setActivePhoto(photo)"
+                >
+                  <img [src]="photo" alt="Photo thumbnail" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="d-flex justify-content-between align-items-start mt-3 flex-wrap gap-2">
+          <div>
+            <h1 class="h3 fw-bold mb-1">{{ post.title }}</h1>
+            <p class="text-muted mb-0">
+              <i class="bi bi-geo-alt me-1"></i>{{ post.address }}, {{ post.city }}
+              <span class="mx-2">•</span>
+              <i class="bi bi-clock-history me-1"></i>Posted {{ post.createdAt | timeAgo }}
+              <span class="mx-2">•</span>
+              <i class="bi bi-eye me-1"></i>{{ post.views }} views
+            </p>
+          </div>
+          @if (isOwner()) {
+            <div class="d-flex gap-2">
+              <a class="btn btn-outline-primary btn-sm" [routerLink]="['/listings', post.id, 'edit']">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </a>
+              <button class="btn btn-outline-danger btn-sm" type="button" (click)="deletePost()">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="row g-2 my-3 facts-row">
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-door-open"></i><span>{{ post.bedrooms }} Beds · {{ post.bathrooms }} Baths</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-aspect-ratio"></i><span>{{ post.squareFeet | number: '1.0-0' }} sq ft</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-building"></i><span>{{ post.propertyType }}</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-sofa"></i><span>{{ post.isFurnished ? 'Furnished' : 'Unfurnished' }}</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-calendar-range"></i><span>{{ leaseLabel() }}</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-people"></i><span>{{ post.isShared ? 'Shared property' : 'Whole property' }}</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-cash-coin"></i><span>{{ priceLabel() }}</span></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="fact"><i class="bi bi-hand-thumbs-up"></i><span>{{ post.isNegotiable ? 'Negotiable' : 'Fixed price' }}</span></div>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <h2 class="h5 fw-bold">Description</h2>
+          <p class="mb-0">{{ post.description }}</p>
+        </div>
+
+        <div class="detail-card">
+          <h2 class="h5 fw-bold">Amenities</h2>
+          @if (post.amenities.length > 0) {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+              @for (amenity of post.amenities; track amenity) {
+                <div class="col">
+                  <span class="amenity"><i class="bi bi-check2-circle me-1"></i>{{ amenity }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="text-muted mb-0">No amenities listed.</p>
+          }
+        </div>
+
+        <!-- Comments -->
+        <app-comment-section [listingId]="post.id" />
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sticky-side">
+          <div class="price-card">
+            <div class="price">₹{{ post.expectedRent | number: '1.0-0' }}<small>/month</small></div>
+            <div class="text-muted small mb-3">
+              {{ priceLabel() }} @if (post.isNegotiable) { · Negotiable }
+            </div>
+
+            <button class="btn btn-accent w-100 mb-2" type="button" (click)="toggleFavorite()">
+              <i class="bi" [class.bi-heart-fill]="isFavorite()" [class.bi-heart]="!isFavorite()"></i>
+              {{ isFavorite() ? 'Saved to Favourites' : 'Mark as Favorite' }}
+            </button>
+
+            @if (!isOwner()) {
+              @if (showInquiryForm()) {
+                <button class="btn btn-outline-secondary w-100" type="button" (click)="toggleInquiryForm()">
+                  Hide inquiry form
+                </button>
+              } @else {
+                <button class="btn btn-primary w-100" type="button" (click)="toggleInquiryForm()">
+                  <i class="bi bi-envelope-paper me-1"></i>Send Inquiry to Landlord
+                </button>
+              }
+            } @else {
+              <div class="alert alert-info small mb-0 mt-2">This is your own post.</div>
+            }
+          </div>
+
+          @if (showInquiryForm()) {
+            <div class="detail-card mt-3">
+              <h2 class="h6 fw-bold">Express your interest</h2>
+              @if (inquirySent()) {
+                <div class="alert alert-success small">
+                  <i class="bi bi-check2-circle me-1"></i>Inquiry sent! You can send another if needed.
+                </div>
+              }
+              <form [formGroup]="inquiryForm" (ngSubmit)="sendInquiry()" novalidate>
+                <div class="mb-2">
+                  <label class="form-label small" for="inqPhone">Your phone *</label>
+                  <input
+                    id="inqPhone"
+                    type="tel"
+                    class="form-control"
+                    formControlName="phone"
+                    [class.is-invalid]="inquiryForm.controls.phone.invalid && inquiryForm.controls.phone.touched"
+                  />
+                  @if (inquiryForm.controls.phone.invalid && inquiryForm.controls.phone.touched) {
+                    <div class="invalid-feedback">Enter a valid phone number.</div>
+                  }
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small" for="inqMessage">Message to landlord *</label>
+                  <textarea
+                    id="inqMessage"
+                    rows="4"
+                    class="form-control"
+                    formControlName="message"
+                    placeholder="Hi! I'm interested in this place. Is it still available?"
+                    [class.is-invalid]="inquiryForm.controls.message.invalid && inquiryForm.controls.message.touched"
+                  ></textarea>
+                  @if (inquiryForm.controls.message.invalid && inquiryForm.controls.message.touched) {
+                    <div class="invalid-feedback">
+                      @if (inquiryForm.controls.message.errors?.['required']) {
+                        A short message is required.
+                      } @else if (inquiryForm.controls.message.errors?.['minlength']) {
+                        At least 10 characters, please.
+                      } @else {
+                        Max 500 characters.
+                      }
+                    </div>
+                  }
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Submit Inquiry</button>
+              </form>
+            </div>
+          }
+
+          <div class="detail-card mt-3 owner-card">
+            <h2 class="h6 fw-bold mb-1">Listed by</h2>
+            <div class="d-flex align-items-center gap-2">
+              <span class="owner-avatar">{{ post.ownerName.charAt(0) }}</span>
+              <div>
+                <div class="fw-semibold">{{ post.ownerName }}</div>
+                <div class="text-muted small">{{ post.ownerEmail }}</div>
+              </div>
+            </div>
+            <p class="text-muted small mb-0 mt-2">
+              <i class="bi bi-shield-check me-1"></i>Contact details are shared when you send an inquiry.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+

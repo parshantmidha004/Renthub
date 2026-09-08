@@ -1,0 +1,50 @@
+// Bootstrap + icons (CSS library used across the app)
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root {
+  --rh-primary: #0ea5e9;
+  --rh-dark: #0f172a;
+  --rh-accent: #5eead4;
+  --rh-muted: #64748b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f4f7fb;
+  color: #1e293b;
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+}
+
+// Make anchored sections account for the sticky navbar
+section[id] {
+  scroll-margin-top: 76px;
+}
+
+// Subtle focus ring consistent with brand color
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible {
+  outline: 2px solid rgba(14, 165, 233, 0.45);
+  outline-offset: 1px;
+}
+
+// Remove default glow, use Bootstrap validation colors everywhere
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--rh-primary);
+  box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.15);
+}
+
+.text-muted {
+  color: var(--rh-muted) !important;
+}

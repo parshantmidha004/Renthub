@@ -1,0 +1,67 @@
+.app-navbar {
+  background: linear-gradient(90deg, #101a2c 0%, #16294d 60%, #1c3a6e 100%);
+  box-shadow: 0 2px 16px rgba(9, 18, 35, 0.35);
+
+  .navbar-brand {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+
+    em {
+      color: #5eead4;
+      font-style: normal;
+    }
+  }
+
+  .brand-badge {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(94, 234, 212, 0.15);
+    color: #5eead4;
+    font-size: 1.05rem;
+  }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.82);
+
+    &.active,
+    &:hover {
+      color: #5eead4;
+    }
+  }
+
+  .user-chip {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .avatar {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #5eead4;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+  }
+
+  .btn-accent {
+    background: #5eead4;
+    border-color: #5eead4;
+    color: #0f172a;
+    font-weight: 600;
+
+    &:hover {
+      background: #7cf0dd;
+      border-color: #7cf0dd;
+      color: #0f172a;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#f3e8ff"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="660" cy="110" r="52" fill="#ffffff" opacity="0.5"/>
+  <circle cx="660" cy="110" r="38" fill="#ffffff" opacity="0.75"/>
+  <g opacity="0.25">
+    <rect x="30" y="240" width="90" height="220" rx="6" fill="#0f172a" opacity="0.85"/><rect x="42" y="254" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="75" y="254" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="42" y="318" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="75" y="318" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="42" y="382" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="75" y="382" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/>
+    <rect x="140" y="280" width="70" height="180" rx="6" fill="#0f172a" opacity="0.85"/><rect x="152" y="294" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="175" y="294" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="152" y="370" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="175" y="370" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/>
+    <rect x="560" y="260" width="80" height="200" rx="6" fill="#0f172a" opacity="0.85"/><rect x="572" y="274" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="600" y="274" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="572" y="360" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="600" y="360" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/>
+    <rect x="670" y="300" width="90" height="160" rx="6" fill="#0f172a" opacity="0.85"/><rect x="682" y="314" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="715" y="314" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="682" y="380" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="715" y="380" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/>
+  </g>
+  <rect x="230" y="170" width="150" height="290" rx="6" fill="url(#accent)" opacity="0.95"/><rect x="242" y="184" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="305" y="184" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="242" y="250" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="305" y="250" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="242" y="315" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="305" y="315" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="242" y="380" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/><rect x="305" y="380" width="16" height="18" rx="2" fill="#ffffff" opacity="0.35"/>
+  <rect x="400" y="230" width="120" height="230" rx="6" fill="#1e293b" opacity="0.9"/><rect x="412" y="244" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/><rect x="460" y="244" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/><rect x="412" y="311" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/><rect x="460" y="311" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/><rect x="412" y="379" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/><rect x="460" y="379" width="16" height="18" rx="2" fill="#f3e8ff" opacity="0.35"/>
+  <rect x="0" y="440" width="800" height="60" fill="#0f172a" opacity="0.85"/>
+  <rect x="0" y="436" width="800" height="8" rx="4" fill="#ffffff" opacity="0.15"/>
+  <text x="40" y="478" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff" opacity="0.9">RentHub Listing #4</text>
+</svg>

@@ -1,0 +1,14 @@
+<div class="toast-stack" aria-live="polite">
+  @for (toast of toasts(); track toast.id) {
+    <div class="app-toast" [class]="'app-toast-' + toast.type">
+      <i
+        class="bi"
+        [class.bi-check-circle]="toast.type === 'success'"
+        [class.bi-exclamation-circle]="toast.type === 'danger'"
+        [class.bi-info-circle]="toast.type === 'info'"
+      ></i>
+      <span>{{ toast.message }}</span>
+      <button type="button" class="btn-close btn-close-white ms-2" (click)="dismiss(toast.id)" aria-label="Close"></button>
+    </div>
+  }
+</div>

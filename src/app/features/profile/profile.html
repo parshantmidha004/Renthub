@@ -1,0 +1,105 @@
+<section class="container profile-page py-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <span class="big-avatar">{{ currentUser()?.name?.charAt(0) }}</span>
+      <div>
+        <h1 class="h4 fw-bold mb-0">{{ currentUser()?.name }}</h1>
+        <span class="text-muted small">{{ currentUser()?.email }}</span>
+      </div>
+    </div>
+    <a class="btn btn-primary" routerLink="/listings/new">
+      <i class="bi bi-plus-lg me-1"></i>New Post
+    </a>
+  </div>
+
+  <ul class="nav nav-pills mb-4 profile-tabs">
+    <li class="nav-item">
+      <button class="nav-link" type="button" [class.active]="tab() === 'posts'" (click)="setTab('posts')">
+        <i class="bi bi-house-door me-1"></i>My Posts
+        <span class="badge text-bg-light ms-1">{{ myPosts().length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" type="button" [class.active]="tab() === 'favorites'" (click)="setTab('favorites')">
+        <i class="bi bi-heart me-1"></i>Favourites
+        <span class="badge text-bg-light ms-1">{{ favorites().length }}</span>
+      </button>
+    </li>
+  </ul>
+
+  @if (tab() === 'posts') {
+    @if (myPosts().length > 0) {
+      <div class="row g-4">
+        @for (post of myPosts(); track post.id) {
+          <div class="col-sm-6 col-lg-4">
+            <div class="post-wrap">
+              @if (post.status === 'draft') {
+                <span class="badge draft-badge">Draft</span>
+              }
+              <app-listing-card [listing]="post" />
+              <div class="d-flex gap-2 mt-2">
+                <a
+                  class="btn btn-sm btn-outline-primary flex-fill"
+                  [routerLink]="post.status === 'published' ? ['/listings', post.id] : ['/listings', post.id, 'preview']"
+                >
+                  @if (post.status === 'published') {
+                    View
+                  } @else {
+                    Preview & Submit
+                  }
+                </a>
+                <a class="btn btn-sm btn-outline-secondary flex-fill" [routerLink]="['/listings', post.id, 'edit']">
+                  Edit
+                </a>
+                <button class="btn btn-sm btn-outline-danger" type="button" (click)="removePost(post.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty text-center py-5">
+        <i class="bi bi-house-x display-4 d-block mb-3 text-muted"></i>
+        <h2 class="h5">You haven't posted any property yet</h2>
+        <p class="text-muted">Create your first listing — it takes less than two minutes.</p>
+        <a class="btn btn-primary" routerLink="/listings/new">Create New Post</a>
+      </div>
+    }
+
+    @if (myInquiries().length > 0) {
+      <h2 class="h5 fw-bold mt-5 mb-3">Inquiries you sent</h2>
+      <div class="list-group">
+        @for (inquiry of myInquiries(); track inquiry.id) {
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <a [routerLink]="['/listings', inquiry.listingId]" class="fw-semibold">
+                {{ inquiry.listingTitle }}
+              </a>
+              <span class="text-muted small">{{ inquiry.createdAt | timeAgo }}</span>
+            </div>
+            <p class="mb-0 small text-muted">{{ inquiry.message }}</p>
+          </div>
+        }
+      </div>
+    }
+  } @else {
+    @if (favorites().length > 0) {
+      <div class="row g-4">
+        @for (post of favorites(); track post.id) {
+          <div class="col-sm-6 col-lg-4">
+            <app-listing-card [listing]="post" />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty text-center py-5">
+        <i class="bi bi-heartbreak display-4 d-block mb-3 text-muted"></i>
+        <h2 class="h5">No favourites yet</h2>
+        <p class="text-muted">Tap the heart on any listing to save it here.</p>
+        <a class="btn btn-outline-primary" routerLink="/home">Browse listings</a>
+      </div>
+    }
+  }
+</section>

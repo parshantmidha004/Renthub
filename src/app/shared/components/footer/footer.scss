@@ -1,0 +1,30 @@
+.app-footer {
+  background: #101a2c;
+  color: rgba(255, 255, 255, 0.75);
+
+  .brand {
+    color: #fff;
+    font-weight: 700;
+
+    em {
+      color: #5eead4;
+      font-style: normal;
+    }
+  }
+
+  .tagline {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .icon-link {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.2rem;
+    margin-left: 0.9rem;
+    text-decoration: none;
+
+    &:hover {
+      color: #5eead4;
+    }
+  }
+}

@@ -1,0 +1,421 @@
+<section class="container listing-form py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <nav class="mb-3 small">
+        <a routerLink="/home">Home</a> <span class="mx-1">/</span>
+        <span class="text-muted">{{ editing() ? 'Edit Post' : 'Create New Post' }}</span>
+      </nav>
+
+      <h1 class="h3 fw-bold mb-1">{{ editing() ? 'Edit Post' : 'Create New Post' }}</h1>
+      <p class="text-muted mb-4">
+        Fill in the property details below. Fields marked with * are required.
+      </p>
+
+      <form [formGroup]="form" novalidate (ngSubmit)="false">
+        <!-- Choose your Apartment/Building -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Choose your Apartment/Building *</legend>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small" for="propertyType">Choose your Apartment/Building type</label>
+              <select
+                id="propertyType"
+                class="form-select"
+                formControlName="propertyType"
+                [class.is-invalid]="invalid(propertyType)"
+              >
+                @for (type of propertyTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+              @if (invalid(propertyType)) {
+                <div class="invalid-feedback">Please select a property type.</div>
+              }
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small" for="propertyName">Enter the name of your property</label>
+              <input
+                id="propertyName"
+                type="text"
+                class="form-control"
+                formControlName="propertyName"
+                placeholder="e.g. Palm Springs"
+                [class.is-invalid]="invalid(propertyName)"
+              />
+              @if (invalid(propertyName)) {
+                <div class="invalid-feedback">
+                  @if (propertyName.errors?.['required']) {
+                    Property name is required.
+                  } @else {
+                    Max 80 characters.
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Shared property -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Is this a shared property? *</legend>
+          @for (option of [true, false]; track option) {
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isShared"
+                id="shared-{{ option }}"
+                [value]="option"
+                [checked]="form.controls.isShared.value === option"
+                (change)="form.controls.isShared.setValue(option)"
+              />
+              <label class="form-check-label" for="shared-{{ option }}">
+                {{ option ? 'Yes' : 'No' }}
+              </label>
+            </div>
+          }
+        </fieldset>
+
+        <!-- Property Location -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Property Location *</legend>
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label small" for="address">Street Address</label>
+              <input
+                id="address"
+                type="text"
+                class="form-control"
+                formControlName="address"
+                placeholder="Enter street address"
+                [class.is-invalid]="invalid(address)"
+              />
+              @if (invalid(address)) {
+                <div class="invalid-feedback">
+                  @if (address.errors?.['required']) {
+                    Street address is required.
+                  } @else {
+                    Max 160 characters.
+                  }
+                </div>
+              }
+            </div>
+            <div class="col-md-5">
+              <label class="form-label small" for="formCity">City</label>
+              <select
+                id="formCity"
+                class="form-select"
+                formControlName="city"
+                [class.is-invalid]="invalid(city)"
+              >
+                <option [ngValue]="''" disabled>Select a city</option>
+                @for (city of cities; track city) {
+                  <option [value]="city">{{ city }}</option>
+                }
+              </select>
+              @if (invalid(city)) {
+                <div class="invalid-feedback">Please select a city.</div>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Property Details -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Property Details *</legend>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small" for="squareFeet">Square Feet</label>
+              <input
+                id="squareFeet"
+                type="number"
+                class="form-control"
+                formControlName="squareFeet"
+                placeholder="Enter area in square feet"
+                min="50"
+                [class.is-invalid]="invalid(squareFeet)"
+              />
+              @if (invalid(squareFeet)) {
+                <div class="invalid-feedback">
+                  @if (squareFeet.errors?.['required']) {
+                    Area is required.
+                  } @else if (squareFeet.errors?.['positive']) {
+                    Area must be a positive number.
+                  } @else {
+                    Minimum 50 sq ft.
+                  }
+                </div>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small" for="bedrooms">Bedrooms</label>
+              <input
+                id="bedrooms"
+                type="number"
+                class="form-control"
+                formControlName="bedrooms"
+                min="0"
+                max="20"
+                [class.is-invalid]="invalid(bedrooms)"
+              />
+              @if (invalid(bedrooms)) {
+                <div class="invalid-feedback">0–20 allowed.</div>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small" for="bathrooms">Bathrooms</label>
+              <input
+                id="bathrooms"
+                type="number"
+                class="form-control"
+                formControlName="bathrooms"
+                min="0"
+                max="20"
+                [class.is-invalid]="invalid(bathrooms)"
+              />
+              @if (invalid(bathrooms)) {
+                <div class="invalid-feedback">0–20 allowed.</div>
+              }
+            </div>
+            <div class="col-12">
+              <label class="form-label small d-block">Stay / Lease type *</label>
+              @for (option of leaseTypes; track option.value) {
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="leaseType"
+                    id="lease-{{ option.value }}"
+                    value="{{ option.value }}"
+                    [checked]="form.controls.leaseType.value === option.value"
+                    (change)="form.controls.leaseType.setValue(option.value)"
+                  />
+                  <label class="form-check-label" for="lease-{{ option.value }}">{{ option.label }}</label>
+                </div>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Expected Rent -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Expected Rent *</legend>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small" for="expectedRent">Expected Rent (₹ per month)</label>
+              <input
+                id="expectedRent"
+                type="number"
+                class="form-control"
+                formControlName="expectedRent"
+                placeholder="Enter expected rent"
+                min="500"
+                [class.is-invalid]="invalid(expectedRent)"
+              />
+              @if (invalid(expectedRent)) {
+                <div class="invalid-feedback">
+                  @if (expectedRent.errors?.['required']) {
+                    Rent is required.
+                  } @else if (expectedRent.errors?.['positive']) {
+                    Rent must be a positive number.
+                  } @else {
+                    Minimum ₹500.
+                  }
+                </div>
+              }
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="isNegotiable" formControlName="isNegotiable" />
+                <label class="form-check-label" for="isNegotiable">Negotiable</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small d-block">Price Mode *</label>
+              @for (option of priceModes; track option.value) {
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="priceMode"
+                    id="price-{{ option.value }}"
+                    value="{{ option.value }}"
+                    [checked]="form.controls.priceMode.value === option.value"
+                    (change)="form.controls.priceMode.setValue(option.value)"
+                  />
+                  <label class="form-check-label" for="price-{{ option.value }}">{{ option.label }}</label>
+                </div>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Furnished -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Is the room/apartment furnished? *</legend>
+          <div class="d-flex gap-4">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isFurnished"
+                id="furnished-yes"
+                [value]="true"
+                [checked]="form.controls.isFurnished.value === true"
+                (change)="form.controls.isFurnished.setValue(true)"
+              />
+              <label class="form-check-label" for="furnished-yes">Yes</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="isFurnished"
+                id="furnished-no"
+                [value]="false"
+                [checked]="form.controls.isFurnished.value === false"
+                (change)="form.controls.isFurnished.setValue(false)"
+              />
+              <label class="form-check-label" for="furnished-no">No</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Amenities -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Amenities included</legend>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2">
+            @for (amenity of amenitiesList; track amenity) {
+              <div class="col">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="amenity-{{ $index }}"
+                    [checked]="amenityChecked(amenity)"
+                    (change)="toggleAmenity(amenity)"
+                  />
+                  <label class="form-check-label" for="amenity-{{ $index }}">{{ amenity }}</label>
+                </div>
+              </div>
+            }
+          </div>
+        </fieldset>
+
+        <!-- Description -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Description *</legend>
+          <div class="mb-3">
+            <label class="form-label small" for="title">Title</label>
+            <input
+              id="title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              placeholder="e.g. Sunny 2BHK with skyline views"
+              [class.is-invalid]="invalid(title)"
+            />
+            @if (invalid(title)) {
+              <div class="invalid-feedback">
+                @if (title.errors?.['required']) {
+                  Title is required.
+                } @else if (title.errors?.['minlength']) {
+                  Title must be at least 10 characters.
+                } @else {
+                  Max 100 characters.
+                }
+              </div>
+            }
+          </div>
+
+          <div>
+            <label class="form-label small d-flex justify-content-between" for="postDescription">
+              <span>Description</span>
+              <span [class.text-danger]="descriptionLength() > descriptionLimit">
+                {{ descriptionLength() }} / {{ descriptionLimit }}
+              </span>
+            </label>
+            <textarea
+              id="postDescription"
+              class="form-control"
+              rows="6"
+              formControlName="description"
+              placeholder="Enter a detailed description within 1400 characters"
+              [class.is-invalid]="invalid(description)"
+            ></textarea>
+            @if (invalid(description)) {
+              <div class="invalid-feedback">
+                @if (description.errors?.['required']) {
+                  Description is required.
+                } @else if (description.errors?.['minlength']) {
+                  Description must be at least 30 characters.
+                } @else {
+                  Max 1400 characters.
+                }
+              </div>
+            }
+          </div>
+        </fieldset>
+
+        <!-- Contact & Photos -->
+        <fieldset class="form-section">
+          <legend class="form-legend">Contact & Photos</legend>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small" for="phone">Contact Phone *</label>
+              <input
+                id="phone"
+                type="tel"
+                class="form-control"
+                formControlName="phone"
+                placeholder="+91 98765 43210"
+                [class.is-invalid]="invalid(phone)"
+              />
+              @if (invalid(phone)) {
+                <div class="invalid-feedback">
+                  @if (phone.errors?.['required']) {
+                    Phone number is required.
+                  } @else {
+                    Enter a valid phone number.
+                  }
+                </div>
+              }
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Photo URLs <span class="text-muted">(optional)</span></label>
+              @for (photo of photoUrls.controls; track $index) {
+                <div class="input-group mb-2">
+                  <input
+                    type="url"
+                    class="form-control"
+                    placeholder="https://…"
+                    [formControl]="photoUrls.controls[$index]"
+                    [class.is-invalid]="submitted() && photo.invalid"
+                  />
+                  <button class="btn btn-outline-danger" type="button" (click)="removePhoto($index)" aria-label="Remove photo">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+              }
+              <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addPhoto()">
+                <i class="bi bi-plus-lg me-1"></i>Add photo URL
+              </button>
+              @if (submitted() && photoUrls.controls.some((p) => p.invalid)) {
+                <div class="small text-danger mt-1">Photo URLs must start with http:// or https://</div>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-end pb-5">
+          <button class="btn btn-outline-secondary" type="button" (click)="cancel()">Cancel</button>
+          <button class="btn btn-outline-primary" type="button" (click)="saveDraft()">Save as Draft</button>
+          <button class="btn btn-primary btn-lg" type="button" (click)="preview()">
+            <i class="bi bi-eye me-1"></i>
+            {{ editing()?.status === 'published' ? 'Save Changes' : 'Preview & Submit' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+

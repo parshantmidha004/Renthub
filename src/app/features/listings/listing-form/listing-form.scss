@@ -1,0 +1,27 @@
+.listing-form {
+  .form-section {
+    background: #fff;
+    border: 1px solid #e8edf5;
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-legend {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #e2e8f0;
+    width: auto;
+  }
+
+  .form-label {
+    font-weight: 500;
+  }
+
+  textarea[formControlName='description'] {
+    resize: vertical;
+  }
+}

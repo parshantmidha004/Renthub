@@ -1,0 +1,110 @@
+<div class="detail-card comment-section">
+  <h2 class="h5 fw-bold">Comments <span class="badge text-bg-secondary align-middle ms-1">{{ comments().length }}</span></h2>
+
+  @if (currentUser(); as user) {
+    <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="mb-4" novalidate>
+      <label class="form-label small visually-hidden" for="newComment">Leave a comment</label>
+      <textarea
+        id="newComment"
+        class="form-control"
+        rows="3"
+        formControlName="text"
+        placeholder="Leave a comment — ask the landlord anything…"
+        [class.is-invalid]="invalid(commentForm.controls.text)"
+      ></textarea>
+      @if (invalid(commentForm.controls.text)) {
+        <div class="invalid-feedback">
+          @if (commentForm.controls.text.errors?.['required']) {
+            Please write something first.
+          } @else if (commentForm.controls.text.errors?.['minlength']) {
+            At least 2 characters, please.
+          } @else {
+            Max 1000 characters.
+          }
+        </div>
+      }
+      <div class="text-end mt-2">
+        <button class="btn btn-primary" type="submit" [disabled]="commentForm.invalid">
+          <i class="bi bi-send me-1"></i>Submit
+        </button>
+      </div>
+    </form>
+  } @else {
+    <div class="login-nudge mb-4">
+      <i class="bi bi-chat-square-text me-1"></i>
+      <a routerLink="/login" [queryParams]="{ returnUrl: '/listings/' + listingId() }">Login</a>
+      or <a routerLink="/register">register</a> to join the discussion.
+    </div>
+  }
+
+  @if (comments().length === 0) {
+    <p class="text-muted mb-0">
+      <i class="bi bi-chat-left-dots me-1"></i>No comments yet. Be the first to ask a question!
+    </p>
+  }
+
+  @for (node of comments(); track node.comment.id) {
+    <div class="comment">
+      <div class="d-flex gap-2">
+        <span class="c-avatar">{{ node.comment.authorName.charAt(0) }}</span>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-baseline">
+            <span class="c-author">{{ node.comment.authorName }}</span>
+            <span class="text-muted small">{{ node.comment.createdAt | timeAgo }}</span>
+          </div>
+          <p class="c-text mb-1">{{ node.comment.text }}</p>
+
+          @if (currentUser()) {
+            <button class="btn btn-link btn-sm p-0 reply-btn" type="button" (click)="startReply(node.comment.id)">
+              <i class="bi bi-reply me-1"></i>Reply
+            </button>
+          }
+
+          @if (replyingTo() === node.comment.id) {
+            <form [formGroup]="replyForm" (ngSubmit)="submitReply(node.comment.id)" class="reply-form mt-2" novalidate>
+              <textarea
+                class="form-control"
+                rows="2"
+                formControlName="text"
+                placeholder="Write your reply…"
+                [class.is-invalid]="invalid(replyForm.controls.text)"
+              ></textarea>
+              @if (invalid(replyForm.controls.text)) {
+                <div class="invalid-feedback">
+                  @if (replyForm.controls.text.errors?.['required']) {
+                    Please write something first.
+                  } @else {
+                    Max 1000 characters.
+                  }
+                </div>
+              }
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-sm btn-primary" type="submit" [disabled]="replyForm.invalid">Reply</button>
+                <button class="btn btn-sm btn-outline-secondary" type="button" (click)="cancelReply()">Cancel</button>
+              </div>
+            </form>
+          }
+
+          @if (node.replies.length > 0) {
+            <div class="replies mt-2">
+              @for (reply of node.replies; track reply.id) {
+                <div class="comment reply">
+                  <div class="d-flex gap-2">
+                    <span class="c-avatar small">{{ reply.authorName.charAt(0) }}</span>
+                    <div class="flex-grow-1">
+                      <div class="d-flex justify-content-between align-items-baseline">
+                        <span class="c-author">{{ reply.authorName }}</span>
+                        <span class="text-muted small">{{ reply.createdAt | timeAgo }}</span>
+                      </div>
+                      <p class="c-text mb-0">{{ reply.text }}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

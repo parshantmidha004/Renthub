@@ -1,0 +1,72 @@
+<article class="card listing-card h-100">
+  <div class="photo-wrap">
+    <img [src]="photo()" [alt]="listing().title" loading="lazy" />
+    <span class="badge badge-price">
+      ₹{{ listing().expectedRent | number: '1.0-0' }}
+      <small>/month</small>
+    </span>
+    @if (listing().isNegotiable) {
+      <span class="badge badge-negotiable">Negotiable</span>
+    }
+    <button
+      type="button"
+      class="btn fav-btn"
+      (click)="toggleFavorite()"
+      [attr.aria-pressed]="isFavorite()"
+      [class.active]="isFavorite()"
+      title="Mark as favourite"
+    >
+      <i class="bi" [class.bi-heart-fill]="isFavorite()" [class.bi-heart]="!isFavorite()"></i>
+    </button>
+  </div>
+
+  <div class="card-body d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <h3 class="card-title mb-1">{{ listing().title }}</h3>
+    </div>
+    <p class="text-muted small mb-2">
+      <i class="bi bi-geo-alt me-1"></i>{{ listing().address }}, {{ listing().city }}
+      <span class="dot">•</span>
+      <i class="bi bi-clock-history me-1"></i>{{ listing().createdAt | timeAgo }}
+    </p>
+
+    <div class="facts row g-2 mb-2">
+      <div class="col-4">
+        <i class="bi bi-door-open"></i>
+        {{ listing().bedrooms }} Beds
+      </div>
+      <div class="col-4">
+        <i class="bi bi-aspect-ratio"></i>
+        {{ listing().squareFeet | number: '1.0-0' }} sqft
+      </div>
+      <div class="col-4">
+        <i class="bi bi-tag"></i>
+        {{ listing().propertyType }}
+      </div>
+    </div>
+
+    <p class="card-text small">{{ listing().description | truncate: 110 }}</p>
+
+    <div class="amenity-chips mb-3">
+      @for (amenity of previewAmenities(); track amenity) {
+        <span class="chip">{{ amenity }}</span>
+      }
+      @if (extraAmenities() > 0) {
+        <span class="chip chip-more">+{{ extraAmenities() }} more</span>
+      }
+    </div>
+
+    <div class="mt-auto d-flex gap-2">
+      <a class="btn btn-outline-primary btn-sm flex-fill" [routerLink]="['/listings', listing().id]">
+        View Details
+      </a>
+      <button type="button" class="btn btn-primary btn-sm flex-fill" (click)="toggleFavorite()">
+        @if (isFavorite()) {
+          Marked as Favorite
+        } @else {
+          Mark as Favorite
+        }
+      </button>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,205 @@
+<!-- Hero + featured carousel -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-6">
+        <h1 class="hero-title">Find a place you'll love to call <span>home</span></h1>
+        <p class="hero-sub">
+          Browse verified apartment rentals, save your favourites and talk directly with
+          landlords — all in one place.
+        </p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-accent btn-lg" href="#listings">Explore Listings</a>
+          @if (!auth.isLoggedIn()) {
+            <a class="btn btn-outline-light btn-lg" routerLink="/register">Get Started</a>
+          } @else {
+            <a class="btn btn-outline-light btn-lg" routerLink="/listings/new">Post a Property</a>
+          }
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        @if (featured().length > 0) {
+          <div class="carousel-shell" (mouseenter)="stopAutoPlay()" (mouseleave)="startAutoPlay()">
+            @for (item of featured(); track item.id; let i = $index) {
+              <a
+                class="slide"
+                [routerLink]="['/listings', item.id]"
+                [class.active]="i === activeSlide()"
+                [attr.aria-hidden]="i !== activeSlide()"
+                tabindex="-1"
+              >
+                <img [src]="item.photos[0]" [alt]="item.title" />
+                <div class="slide-caption">
+                  <span class="badge bg-dark bg-opacity-50 mb-1">Featured</span>
+                  <h5>{{ item.title }}</h5>
+                  <p class="mb-0">
+                    <i class="bi bi-geo-alt"></i> {{ item.city }}
+                    <span class="mx-2">•</span>
+                    ₹{{ item.expectedRent | number: '1.0-0' }}/month
+                  </p>
+                </div>
+              </a>
+            }
+
+            <button class="carousel-btn prev" type="button" (click)="prevSlide()" aria-label="Previous slide">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next" type="button" (click)="nextSlide()" aria-label="Next slide">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+            <div class="carousel-dots">
+              @for (item of featured(); track item.id; let i = $index) {
+                <button
+                  type="button"
+                  class="dot-btn"
+                  [class.active]="i === activeSlide()"
+                  (click)="goToSlide(i)"
+                  [attr.aria-label]="'Go to slide ' + (i + 1)"
+                ></button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search & filter -->
+<section class="container filter-panel">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-3 p-md-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-lg-4">
+          <label class="form-label small fw-semibold" for="search">Search</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input
+              id="search"
+              type="text"
+              class="form-control"
+              placeholder="Try 'sea facing', 'Indiranagar'…"
+              [value]="filter().searchText"
+              (input)="onSearchText($any($event.target).value)"
+            />
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <label class="form-label small fw-semibold" for="city">City</label>
+          <select id="city" class="form-select" [value]="filter().city" (change)="onCityChange($any($event.target).value)">
+            <option value="">All cities</option>
+            @for (city of cities; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <label class="form-label small fw-semibold" for="minPrice">Min rent</label>
+          <input
+            id="minPrice"
+            type="number"
+            class="form-control"
+            placeholder="₹0"
+            min="0"
+            [value]="filter().minPrice ?? ''"
+            (input)="onMinPrice($any($event.target).value)"
+          />
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <label class="form-label small fw-semibold" for="maxPrice">Max rent</label>
+          <input
+            id="maxPrice"
+            type="number"
+            class="form-control"
+            placeholder="₹ Any"
+            min="0"
+            [value]="filter().maxPrice ?? ''"
+            (input)="onMaxPrice($any($event.target).value)"
+          />
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <label class="form-label small fw-semibold" for="sort">Sort by</label>
+          <select id="sort" class="form-select" [value]="filter().sortBy" (change)="onSortChange($any($event.target).value)">
+            @for (option of sortOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="amenity-filter mt-3">
+        <span class="form-label small fw-semibold mb-1 d-block">Amenities</span>
+        <div class="d-flex flex-wrap gap-2">
+          @for (amenity of amenities; track amenity) {
+            <button
+              type="button"
+              class="btn btn-sm amenity-chip"
+              [class.selected]="filter().amenities.includes(amenity)"
+              (click)="toggleAmenity(amenity)"
+            >
+              {{ amenity }}
+            </button>
+          }
+          @if (hasActiveFilters()) {
+            <button type="button" class="btn btn-sm btn-link text-decoration-none" (click)="clearFilters()">
+              <i class="bi bi-x-circle me-1"></i>Clear all
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- All listings -->
+<section id="listings" class="container listings-section">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h2 class="h3 fw-bold mb-0">All Listings</h2>
+    <span class="text-muted small">{{ result().total }} listing{{ result().total === 1 ? '' : 's' }} found</span>
+  </div>
+
+  @if (result().items.length > 0) {
+    <div class="row g-4">
+      @for (item of result().items; track item.id) {
+        <div class="col-sm-6 col-lg-4">
+          <app-listing-card [listing]="item" />
+        </div>
+      }
+    </div>
+
+    @if (result().totalPages > 1) {
+      <nav class="mt-4" aria-label="Listing pages">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="result().page === 1">
+            <button class="page-link" type="button" (click)="goToPage(result().page - 1)" aria-label="Previous page">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+          @for (page of pages(); track page) {
+            <li class="page-item" [class.active]="page === result().page">
+              <button class="page-link" type="button" (click)="goToPage(page)">{{ page }}</button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="result().page === result().totalPages">
+            <button class="page-link" type="button" (click)="goToPage(result().page + 1)" aria-label="Next page">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    }
+  } @else {
+    <div class="empty-state text-center py-5">
+      <i class="bi bi-house-slash display-3 d-block mb-3"></i>
+      <h3 class="h5">No listings match your search</h3>
+      <p class="text-muted">Try changing the city, price range or clearing some amenities.</p>
+      <button class="btn btn-outline-primary" type="button" (click)="clearFilters()">Clear filters</button>
+    </div>
+  }
+</section>
+

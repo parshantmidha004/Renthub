@@ -1,0 +1,131 @@
+<section class="auth-wrap container">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card auth-card">
+        <div class="card-body p-4 p-md-5">
+          <h1 class="h3 fw-bold mb-1">Create your account</h1>
+          <p class="text-muted mb-4">Join RentHub to post apartments, express interest and comment.</p>
+
+          @if (serverError()) {
+            <div class="alert alert-danger py-2">{{ serverError() }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="Jane Doe"
+                  [class.is-invalid]="submitted() && name.invalid"
+                />
+                @if (submitted() && name.invalid) {
+                  <div class="invalid-feedback">
+                    @if (name.errors?.['required']) {
+                      Name is required.
+                    } @else if (name.errors?.['minlength']) {
+                      Name must be at least 3 characters.
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="phone">Phone <span class="text-muted">(optional)</span></label>
+                <input
+                  id="phone"
+                  type="tel"
+                  class="form-control"
+                  formControlName="phone"
+                  placeholder="+91 98765 43210"
+                  [class.is-invalid]="submitted() && phone.invalid"
+                />
+                @if (submitted() && phone.invalid) {
+                  <div class="invalid-feedback">Enter a valid phone number.</div>
+                }
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="reg-email">Email</label>
+              <input
+                id="reg-email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="you@example.com"
+                [class.is-invalid]="submitted() && email.invalid"
+              />
+              @if (submitted() && email.invalid) {
+                <div class="invalid-feedback">
+                  @if (email.errors?.['required']) {
+                    Email is required.
+                  } @else if (email.errors?.['email']) {
+                    Enter a valid email address.
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="reg-password">Password</label>
+                <input
+                  id="reg-password"
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  [class.is-invalid]="submitted() && password.invalid"
+                />
+                @if (submitted() && password.invalid) {
+                  <div class="invalid-feedback">
+                    @if (password.errors?.['required']) {
+                      Password is required.
+                    } @else if (password.errors?.['minlength']) {
+                      Password must be at least 6 characters.
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="confirm">Confirm Password</label>
+                <input
+                  id="confirm"
+                  type="password"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  [class.is-invalid]="submitted() && confirmPassword.invalid || (submitted() && form.hasError('passwordsMismatch'))"
+                />
+                @if (submitted() && (confirmPassword.invalid || form.hasError('passwordsMismatch'))) {
+                  <div class="invalid-feedback">
+                    @if (confirmPassword.errors?.['required']) {
+                      Please confirm your password.
+                    } @else if (form.hasError('passwordsMismatch')) {
+                      Passwords do not match.
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <button class="btn btn-primary w-100 mb-3" type="submit" [disabled]="submitting()">
+              @if (submitting()) {
+                <span class="spinner-border spinner-border-sm me-2"></span>Creating account…
+              } @else {
+                Register
+              }
+            </button>
+
+            <p class="text-center mb-0 small">
+              Already have an account? <a routerLink="/login">Login</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

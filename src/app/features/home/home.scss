@@ -1,0 +1,149 @@
+.hero {
+  background:
+    radial-gradient(circle at 85% 15%, rgba(94, 234, 212, 0.18), transparent 40%),
+    linear-gradient(135deg, #101a2c 0%, #1c3a6e 100%);
+  color: #fff;
+  padding: 3.5rem 0 6rem;
+
+  .hero-title {
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+
+    span {
+      color: #5eead4;
+    }
+  }
+
+  .hero-sub {
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 34rem;
+  }
+}
+
+.btn-accent {
+  background: #5eead4;
+  border-color: #5eead4;
+  color: #0f172a;
+  font-weight: 600;
+
+  &:hover {
+    background: #7cf0dd;
+    border-color: #7cf0dd;
+    color: #0f172a;
+  }
+}
+
+.carousel-shell {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px rgba(3, 10, 24, 0.45);
+
+  .slide {
+    display: none;
+    text-decoration: none;
+    color: #fff;
+
+    &.active {
+      display: block;
+    }
+
+    img {
+      width: 100%;
+      height: 330px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-caption {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      padding: 1.2rem 1.4rem;
+      background: linear-gradient(transparent, rgba(5, 12, 26, 0.85));
+
+      h5 {
+        font-weight: 700;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.55);
+    color: #fff;
+    display: grid;
+    place-items: center;
+
+    &:hover {
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    &.prev {
+      left: 12px;
+    }
+
+    &.next {
+      right: 12px;
+    }
+  }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    display: flex;
+    gap: 6px;
+
+    .dot-btn {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.45);
+      padding: 0;
+
+      &.active {
+        background: #5eead4;
+      }
+    }
+  }
+}
+
+.filter-panel {
+  margin-top: -3rem;
+  position: relative;
+  z-index: 5;
+
+  .card {
+    border-radius: 14px;
+  }
+}
+
+.amenity-chip {
+  border: 1px solid #dbe4f0;
+  color: #475569;
+  border-radius: 999px;
+  font-weight: 500;
+
+  &.selected {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #fff;
+  }
+}
+
+.listings-section {
+  padding: 2.5rem 0.75rem 4rem;
+}
