@@ -7,7 +7,7 @@ Renters can browse, search, save favourites and ask landlords questions, while l
 publish detailed apartment listings — including photos, rent, amenities and contact details.
 
 > 🔗 **GitHub repository:** https://github.com/parshantmidha004/Renthub
-> 🌐 **Deployed application:** `https://<your-app>.netlify.app` _(replace with your deployment URL)_
+> 🌐 **Deployed application:** https://dancing-melomakarona-8ec014.netlify.app/home
 
 ---
 
